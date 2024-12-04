@@ -9,7 +9,7 @@ import (
 )
 
 func RunTask() {
-	lines := files.ReadLines("day_2/input.txt")
+	lines := files.ReadLines("day2/input.txt")
 
 	fmt.Printf("Safe reports: %d\n", countSafeReports(lines, false))
 	// Ashamed of this but I'll fix it

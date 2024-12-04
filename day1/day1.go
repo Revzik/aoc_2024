@@ -11,7 +11,7 @@ import (
 )
 
 func RunTask() {
-	lines := files.ReadLines("day_1/input.txt")
+	lines := files.ReadLines("day1/input.txt")
 
 	fmt.Printf("Part 1: %d\n", totalDistance(lines))
 	fmt.Printf("Part 2: %d\n", similarityScore(lines))
