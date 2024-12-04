@@ -1,36 +1,23 @@
-package main
+package day1
 
 import (
-	"bufio"
 	"fmt"
-	"log"
-	"os"
 	"sort"
-	"strconv"
 	"strings"
+
+	"github.com/revzik/aoc_2024/common/files"
+	"github.com/revzik/aoc_2024/common/intmath"
+	"github.com/revzik/aoc_2024/common/parsers"
 )
 
-func main() {
-	path := "input.txt"
+func RunTask() {
+	lines := files.ReadLines("day_1/input.txt")
 
-	file, err := os.Open(path)
-	if err != nil {
-		log.Fatalf("Error occurred while opening file %v, %v", path, err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	var lines []string
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-
-	fmt.Printf("Part 1: %d\n", TotalDistance(lines))
-	fmt.Printf("Part 2: %d\n", SimilarityScore(lines))
+	fmt.Printf("Part 1: %d\n", totalDistance(lines))
+	fmt.Printf("Part 2: %d\n", similarityScore(lines))
 }
 
-func TotalDistance(idListsLines []string) int {
+func totalDistance(idListsLines []string) int {
 	list1, list2 := linesToLists(idListsLines)
 
 	sort.Ints(list1)
@@ -38,17 +25,14 @@ func TotalDistance(idListsLines []string) int {
 
 	totalDistance := 0
 	for i := 0; i < len(idListsLines); i++ {
-		distance := list1[i] - list2[i]
-		if distance < 0 {
-			distance = -distance
-		}
+		distance := intmath.Abs(list1[i] - list2[i])
 		totalDistance += distance
 	}
 
 	return totalDistance
 }
 
-func SimilarityScore(idListsLines []string) int {
+func similarityScore(idListsLines []string) int {
 	list1, list2 := linesToLists(idListsLines)
 
 	computedValues := make(map[int]int)
@@ -74,18 +58,10 @@ func linesToLists(idListsLines []string) ([]int, []int) {
 
 	for i, line := range idListsLines {
 		splitLine := strings.Split(line, "   ")
-		list1[i] = parseInt(splitLine[0])
-		list2[i] = parseInt(splitLine[1])
+		list1[i] = parsers.ParseInt(splitLine[0])
+		list2[i] = parsers.ParseInt(splitLine[1])
 	}
 	return list1, list2
-}
-
-func parseInt(numString string) int {
-	num, err := strconv.Atoi(numString)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return num
 }
 
 func countOccurrences(number int, list []int) int {

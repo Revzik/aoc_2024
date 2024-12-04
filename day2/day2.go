@@ -1,37 +1,23 @@
-package main
+package day2
 
 import (
-	"bufio"
 	"fmt"
-	"log"
-	"os"
-	"strconv"
 	"strings"
+
+	"github.com/revzik/aoc_2024/common/files"
+	"github.com/revzik/aoc_2024/common/parsers"
 )
 
-func main() {
-	path := "input.txt"
+func RunTask() {
+	lines := files.ReadLines("day_2/input.txt")
 
-	file, err := os.Open(path)
-	if err != nil {
-		log.Fatalf("Error occurred while opening file %v, %v", path, err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	var lines []string
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-
-	fmt.Printf("Safe reports: %d\n", CountSafeReports(lines, false))
+	fmt.Printf("Safe reports: %d\n", countSafeReports(lines, false))
 	// Ashamed of this but I'll fix it
-	fmt.Printf("Safe reports with dampener (tried to be smart): %d\n", CountSafeReports(lines, true))
-	fmt.Printf("Safe reports with dampener (brute force): %d\n", CountDampenedReportsBruteForce(lines))
+	fmt.Printf("Safe reports with dampener (tried to be smart): %d\n", countSafeReports(lines, true))
+	fmt.Printf("Safe reports with dampener (brute force): %d\n", countDampenedReportsBruteForce(lines))
 }
 
-func CountSafeReports(reportList []string, useDampener bool) int {
+func countSafeReports(reportList []string, useDampener bool) int {
 	safeCount := 0
 	for _, report := range reportList {
 		parsedReport := parseReport(report)
@@ -44,7 +30,7 @@ func CountSafeReports(reportList []string, useDampener bool) int {
 	return safeCount
 }
 
-func CountDampenedReportsBruteForce(reportList []string) int {
+func countDampenedReportsBruteForce(reportList []string) int {
 	safeCount := 0
 	for _, report := range reportList {
 		parsedReport := parseReport(report)
@@ -69,7 +55,7 @@ func parseReport(report string) []int {
 
 	parsedReport := make([]int, len(splitReport))
 	for i, val := range splitReport {
-		parsedReport[i] = parseInt(val)
+		parsedReport[i] = parsers.ParseInt(val)
 	}
 
 	return parsedReport
@@ -125,13 +111,4 @@ func isReportSafe(report []int) bool {
 	}
 
 	return true
-}
-
-// TODO: Extract common functions into importable package
-func parseInt(numString string) int {
-	num, err := strconv.Atoi(numString)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return num
 }

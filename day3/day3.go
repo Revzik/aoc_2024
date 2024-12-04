@@ -1,39 +1,25 @@
-package main
+package day3
 
 import (
-	"bufio"
 	"fmt"
-	"log"
-	"os"
 	"regexp"
-	"strconv"
 	"strings"
+
+	"github.com/revzik/aoc_2024/common/files"
+	"github.com/revzik/aoc_2024/common/parsers"
 )
 
 const DoEnabler = "do()"
 const DontEnabler = "don't()"
 
-func main() {
-	path := "input.txt"
+func RunTask() {
+	lines := files.ReadLines("day_3/input.txt")
 
-	file, err := os.Open(path)
-	if err != nil {
-		log.Fatalf("Error occurred while opening file %v, %v", path, err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	var lines []string
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-
-	fmt.Printf("All multiplications: %d\n", ComputeAllMultiplications(lines))
-	fmt.Printf("All multiplications with enablers: %d\n", ComputeAllMultiplicationsWithEnablers(lines))
+	fmt.Printf("All multiplications: %d\n", computeAllMultiplications(lines))
+	fmt.Printf("All multiplications with enablers: %d\n", computeAllMultiplicationsWithEnablers(lines))
 }
 
-func ComputeAllMultiplications(instructions []string) int {
+func computeAllMultiplications(instructions []string) int {
 	total := 0
 	for _, instruction := range instructions {
 		total += computeMultiplications(instruction)
@@ -54,7 +40,7 @@ func computeMultiplications(instruction string) int {
 	return total
 }
 
-func ComputeAllMultiplicationsWithEnablers(instructions []string) int {
+func computeAllMultiplicationsWithEnablers(instructions []string) int {
 	enabler := DoEnabler
 	var result int
 	total := 0
@@ -87,14 +73,5 @@ func computeWithEnablers(instruction string, enabler string) (int, string) {
 func extractNumbers(multiplication string) (int, int) {
 	strippedMatch := multiplication[4 : len(multiplication)-1]
 	numbers := strings.Split(strippedMatch, ",")
-	return parseInt(numbers[0]), parseInt(numbers[1])
-}
-
-// TODO: Extract common functions into importable package
-func parseInt(numString string) int {
-	num, err := strconv.Atoi(numString)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return num
+	return parsers.ParseInt(numbers[0]), parsers.ParseInt(numbers[1])
 }

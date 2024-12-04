@@ -1,4 +1,4 @@
-package main
+package day1
 
 import "testing"
 
@@ -13,7 +13,7 @@ func TestDistancesMinimalExample(t *testing.T) {
 	}
 	expectedTotal := 11
 
-	total := TotalDistance(idListsLines)
+	total := totalDistance(idListsLines)
 
 	if total != expectedTotal {
 		t.Errorf("Wrong distance, expected %d, got %d", expectedTotal, total)
@@ -31,7 +31,7 @@ func TestSimilarityScoreMinimalExample(t *testing.T) {
 	}
 	expectedTotal := 31
 
-	total := SimilarityScore(idListsLines)
+	total := similarityScore(idListsLines)
 
 	if total != expectedTotal {
 		t.Errorf("Wrong score, expected %d, got %d", expectedTotal, total)

@@ -1,4 +1,4 @@
-package main
+package day2
 
 import "testing"
 
@@ -12,7 +12,7 @@ func TestCountSafeReports(t *testing.T) {
 		"1 3 6 7 9",
 	}
 
-	safeCount := CountSafeReports(reportList, false)
+	safeCount := countSafeReports(reportList, false)
 
 	if safeCount != 2 {
 		t.Fatalf("Expected 2 reports to be safe, got %d", safeCount)
@@ -29,7 +29,7 @@ func TestCountSafeReportsWithDampener(t *testing.T) {
 		"1 3 6 7 9",
 	}
 
-	safeCount := CountSafeReports(reportList, true)
+	safeCount := countSafeReports(reportList, true)
 
 	if safeCount != 4 {
 		t.Fatalf("Expected 4 reports to be safe, got %d", safeCount)
