@@ -21,16 +21,3 @@ func ReadLines(path string) []string {
 	}
 	return lines
 }
-
-func ReadMatrix(path string) [][]rune {
-	lines := ReadLines(path)
-
-	x := len(lines)
-
-	matrix := make([][]rune, x)
-	for i, line := range lines {
-		matrix[i] = []rune(line)
-	}
-
-	return matrix
-}

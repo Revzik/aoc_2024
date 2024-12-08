@@ -5,42 +5,26 @@ import (
 	"unicode"
 
 	"github.com/revzik/aoc_2024/common/files"
+	"github.com/revzik/aoc_2024/common/types"
 )
-
-type Point struct {
-	x int
-	y int
-}
-
-type Board struct {
-	plane [][]rune
-	minX  int
-	maxX  int
-	minY  int
-	maxY  int
-}
 
 func RunTask() {
 	path := "day8/input.txt"
-	matrix := files.ReadMatrix(path)
-	board := createBoard(matrix)
+	matrix := files.ReadLines(path)
+	board := types.CreateBoard(matrix)
 
 	fmt.Printf("Number of weak antinodes: %d\n", countWeakAntinodes(board))
 	fmt.Printf("Number of resonant antinodes: %d\n", countResonantAntinodes(board))
 }
 
-func createBoard(matrix [][]rune) Board {
-	return Board{matrix, 0, len(matrix[0]) - 1, 0, len(matrix) - 1}
-}
-
-func countWeakAntinodes(board Board) int {
+func countWeakAntinodes(board types.Board) int {
 	total := 0
-	antinodes := make(map[Point]bool)
+	antinodes := make(map[types.Point]bool)
 
-	for y := 0; y < board.maxY; y++ {
-		for x := 0; x < board.maxX; x++ {
-			if unicode.IsLetter(board.plane[y][x]) || unicode.IsDigit(board.plane[y][x]) {
-				markWeakAntinodes(board, antinodes, Point{x, y})
+	for y := 0; y < board.MaxY; y++ {
+		for x := 0; x < board.MaxX; x++ {
+			if unicode.IsLetter(board.Plane[y][x]) || unicode.IsDigit(board.Plane[y][x]) {
+				markWeakAntinodes(board, antinodes, types.Point{X: x, Y: y})
 			}
 		}
 	}
@@ -56,18 +40,18 @@ func countWeakAntinodes(board Board) int {
 	return total
 }
 
-func markWeakAntinodes(board Board, antinodes map[Point]bool, p Point) {
-	searchedRune := board.plane[p.y][p.x]
+func markWeakAntinodes(board types.Board, antinodes map[types.Point]bool, p types.Point) {
+	searchedRune := board.Plane[p.Y][p.X]
 
 	// check only to the bottom, top ones are dealt with
-	for i := p.y; i <= board.maxY; i++ {
-		for j := 0; j <= board.maxX; j++ {
-			if board.plane[i][j] == searchedRune && !(p.x == j && p.y == i) {
-				xDist := p.x - j
-				yDist := p.y - i
+	for i := p.Y; i <= board.MaxY; i++ {
+		for j := 0; j <= board.MaxX; j++ {
+			if board.Plane[i][j] == searchedRune && !(p.X == j && p.Y == i) {
+				xDist := p.X - j
+				yDist := p.Y - i
 
-				point1 := Point{p.x + xDist, p.y + yDist}
-				point2 := Point{j - xDist, i - yDist}
+				point1 := types.Point{X: p.X + xDist, Y: p.Y + yDist}
+				point2 := types.Point{X: j - xDist, Y: i - yDist}
 
 				antinodes[point1] = true
 				antinodes[point2] = true
@@ -76,13 +60,13 @@ func markWeakAntinodes(board Board, antinodes map[Point]bool, p Point) {
 	}
 }
 
-func countResonantAntinodes(board Board) int {
-	antinodes := make(map[Point]bool)
+func countResonantAntinodes(board types.Board) int {
+	antinodes := make(map[types.Point]bool)
 
-	for y := 0; y <= board.maxY; y++ {
-		for x := 0; x <= board.maxX; x++ {
-			if unicode.IsLetter(board.plane[y][x]) || unicode.IsDigit(board.plane[y][x]) {
-				markResonantAntinodes(board, antinodes, Point{x, y})
+	for y := 0; y <= board.MaxY; y++ {
+		for x := 0; x <= board.MaxX; x++ {
+			if unicode.IsLetter(board.Plane[y][x]) || unicode.IsDigit(board.Plane[y][x]) {
+				markResonantAntinodes(board, antinodes, types.Point{X: x, Y: y})
 			}
 		}
 	}
@@ -90,43 +74,43 @@ func countResonantAntinodes(board Board) int {
 	return len(antinodes)
 }
 
-func markResonantAntinodes(board Board, antinodes map[Point]bool, p Point) {
-	searchedRune := board.plane[p.y][p.x]
+func markResonantAntinodes(board types.Board, antinodes map[types.Point]bool, p types.Point) {
+	searchedRune := board.Plane[p.Y][p.X]
 
 	// check only to the bottom, top ones are dealt with
-	for i := p.y; i <= board.maxY; i++ {
-		for j := 0; j <= board.maxX; j++ {
-			if board.plane[i][j] == searchedRune && !(p.x == j && p.y == i) {
-				markResonanceInLine(board, antinodes, p, Point{j, i})
+	for i := p.Y; i <= board.MaxY; i++ {
+		for j := 0; j <= board.MaxX; j++ {
+			if board.Plane[i][j] == searchedRune && !(p.X == j && p.Y == i) {
+				markResonanceInLine(board, antinodes, p, types.Point{X: j, Y: i})
 			}
 		}
 	}
 }
 
-func markResonanceInLine(board Board, antinodes map[Point]bool, p1 Point, p2 Point) {
-	xDist := p1.x - p2.x
-	yDist := p1.y - p2.y
+func markResonanceInLine(board types.Board, antinodes map[types.Point]bool, p1 types.Point, p2 types.Point) {
+	xDist := p1.X - p2.X
+	yDist := p1.Y - p2.Y
 
-	x := p1.x
-	y := p1.y
-	for x >= board.minX && x <= board.maxX && y >= board.minY && y <= board.maxY {
-		antinodes[Point{x, y}] = true
+	x := p1.X
+	y := p1.Y
+	for x >= board.MinX && x <= board.MaxX && y >= board.MinY && y <= board.MaxY {
+		antinodes[types.Point{X: x, Y: y}] = true
 		x += xDist
 		y += yDist
 	}
 
-	x = p1.x
-	y = p1.y
-	for x >= board.minX && x <= board.maxX && y >= board.minY && y <= board.maxY {
-		antinodes[Point{x, y}] = true
+	x = p1.X
+	y = p1.Y
+	for x >= board.MinX && x <= board.MaxX && y >= board.MinY && y <= board.MaxY {
+		antinodes[types.Point{X: x, Y: y}] = true
 		x -= xDist
 		y -= yDist
 	}
 }
 
-func validateBoundaries(antinodes map[Point]bool, board Board) {
+func validateBoundaries(antinodes map[types.Point]bool, board types.Board) {
 	for point := range antinodes {
-		if point.x < board.minX || point.x > board.maxX || point.y < board.minY || point.y > board.maxY {
+		if point.X < board.MinX || point.X > board.MaxX || point.Y < board.MinY || point.Y > board.MaxY {
 			antinodes[point] = false
 		}
 	}
