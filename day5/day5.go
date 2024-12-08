@@ -9,7 +9,7 @@ import (
 )
 
 func RunTask() {
-	path := "day5/input.txt"
+	path := "day5/input"
 	lines := files.ReadLines(path)
 
 	ruleMap, pagesSlice := parseInput(lines)

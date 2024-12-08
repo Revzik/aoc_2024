@@ -9,7 +9,7 @@ import (
 )
 
 func RunTask() {
-	path := "day8/input.txt"
+	path := "day8/input"
 	matrix := files.ReadLines(path)
 	board := types.CreateBoard(matrix)
 

@@ -13,7 +13,7 @@ const DoEnabler = "do()"
 const DontEnabler = "don't()"
 
 func RunTask() {
-	lines := files.ReadLines("day3/input.txt")
+	lines := files.ReadLines("day3/input")
 
 	fmt.Printf("All multiplications: %d\n", computeAllMultiplications(lines))
 	fmt.Printf("All multiplications with enablers: %d\n", computeAllMultiplicationsWithEnablers(lines))

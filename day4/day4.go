@@ -8,7 +8,7 @@ import (
 )
 
 func RunTask() {
-	lines := files.ReadLines("day4/input.txt")
+	lines := files.ReadLines("day4/input")
 	matrix := types.CreateMatrix(lines)
 
 	fmt.Printf("XMAS occurrences: %d\n", countXMAS(matrix))
