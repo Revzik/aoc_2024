@@ -6,21 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLinesToMatrix(t *testing.T) {
-	stringLines := []string{
-		"abc",
-		"def",
-		"ghi",
-		"jkl",
-	}
-
-	result := linesToMatrix(stringLines)
-
-	assert.Equal(t, 'a', result[0][0])
-	assert.Equal(t, 'e', result[1][1])
-	assert.Equal(t, 'l', result[3][2])
-}
-
 func TestSearchXMAS(t *testing.T) {
 	matrix := [][]rune{
 		[]rune(".X.X."),

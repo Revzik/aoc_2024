@@ -7,14 +7,13 @@ import (
 )
 
 func RunTask() {
-	lines := files.ReadLines("day4/input.txt")
+	matrix := files.ReadMatrix("day4/input.txt")
 
-	fmt.Printf("XMAS occurrences: %d\n", countXMAS(lines))
-	fmt.Printf("X-MAS occurrences: %d\n", countXShapedMAS(lines))
+	fmt.Printf("XMAS occurrences: %d\n", countXMAS(matrix))
+	fmt.Printf("X-MAS occurrences: %d\n", countXShapedMAS(matrix))
 }
 
-func countXMAS(lines []string) int {
-	matrix := linesToMatrix(lines)
+func countXMAS(matrix [][]rune) int {
 	total := 0
 
 	// We'll find X and then search nearby runes for matches
@@ -81,8 +80,7 @@ func searchXMAS(matrix [][]rune, char rune, x int, y int, dir int) int {
 	return found
 }
 
-func countXShapedMAS(lines []string) int {
-	matrix := linesToMatrix(lines)
+func countXShapedMAS(matrix [][]rune) int {
 	total := 0
 
 	for i := 1; i < len(matrix)-1; i++ {
@@ -115,16 +113,4 @@ func searchXShapedMAS(matrix [][]rune, x int, y int) bool {
 	}
 
 	return false
-}
-
-func linesToMatrix(lines []string) [][]rune {
-	// assume the input is sanitized
-	x := len(lines)
-
-	matrix := make([][]rune, x)
-	for i, line := range lines {
-		matrix[i] = []rune(line)
-	}
-
-	return matrix
 }

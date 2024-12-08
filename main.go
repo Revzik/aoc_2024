@@ -1,6 +1,8 @@
 package main
 
-import "github.com/revzik/aoc_2024/day5"
+import (
+	"github.com/revzik/aoc_2024/day8"
+)
 
 func main() {
 	// TODO: add a parameter to choose a day
@@ -10,5 +12,6 @@ func main() {
 	// day2.RunTask()
 	// day3.RunTask()
 	// day4.RunTask()
-	day5.RunTask()
+	// day5.RunTask()
+	day8.RunTask()
 }
