@@ -5,6 +5,10 @@ type Point struct {
 	Y int
 }
 
+func (p1 *Point) Add(p2 Point) Point {
+	return Point{p1.X + p2.X, p1.Y + p2.Y}
+}
+
 type Board struct {
 	Plane [][]rune
 	MinX  int
@@ -22,6 +26,15 @@ func CreateMatrix(lines []string) [][]rune {
 	}
 
 	return matrix
+}
+
+func CopyMatrix(matrix [][]rune) [][]rune {
+	dst := make([][]rune, len(matrix))
+	for i := range matrix {
+		dst[i] = make([]rune, len(matrix[i]))
+		copy(dst[i], matrix[i])
+	}
+	return dst
 }
 
 func CreateBoard(lines []string) Board {
