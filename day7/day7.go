@@ -34,7 +34,7 @@ func countPossibleEquations(lines []string, concatenate bool) int {
 func parseLine(line string) (int, []string) {
 	splitLine := strings.Split(line, ":")
 
-	target := parsers.ParseInt(splitLine[0])
+	target := parsers.StringToInt(splitLine[0])
 	ingredients := strings.Split(strings.Trim(splitLine[1], " "), " ")
 
 	return target, ingredients
@@ -105,17 +105,17 @@ func canBeCalculated(target int, ingredients []string, concatenate bool) bool {
 }
 
 func calculate(ingredients []string, operations []string) int {
-	total := parsers.ParseInt(ingredients[0])
+	total := parsers.StringToInt(ingredients[0])
 
 	for i, operation := range operations {
 		if operation == "+" {
-			total += parsers.ParseInt(ingredients[i+1])
+			total += parsers.StringToInt(ingredients[i+1])
 		} else if operation == "*" {
-			total *= parsers.ParseInt(ingredients[i+1])
+			total *= parsers.StringToInt(ingredients[i+1])
 		} else if operation == "||" {
 			totalStr := strconv.Itoa(total)
 			totalStr += ingredients[i+1]
-			total = parsers.ParseInt(totalStr)
+			total = parsers.StringToInt(totalStr)
 		}
 	}
 

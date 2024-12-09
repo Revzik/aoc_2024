@@ -58,8 +58,8 @@ func linesToLists(idListsLines []string) ([]int, []int) {
 
 	for i, line := range idListsLines {
 		splitLine := strings.Split(line, "   ")
-		list1[i] = parsers.ParseInt(splitLine[0])
-		list2[i] = parsers.ParseInt(splitLine[1])
+		list1[i] = parsers.StringToInt(splitLine[0])
+		list2[i] = parsers.StringToInt(splitLine[1])
 	}
 	return list1, list2
 }

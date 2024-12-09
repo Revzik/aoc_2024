@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/revzik/aoc_2024/day7"
+	"github.com/revzik/aoc_2024/day9"
 )
 
 func main() {
@@ -14,6 +14,7 @@ func main() {
 	// day4.RunTask()
 	// day5.RunTask()
 	// day6.RunTask()
-	day7.RunTask()
+	// day7.RunTask()
 	// day8.RunTask()
+	day9.RunTask()
 }

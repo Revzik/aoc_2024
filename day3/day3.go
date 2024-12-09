@@ -73,5 +73,5 @@ func computeWithEnablers(instruction string, enabler string) (int, string) {
 func extractNumbers(multiplication string) (int, int) {
 	strippedMatch := multiplication[4 : len(multiplication)-1]
 	numbers := strings.Split(strippedMatch, ",")
-	return parsers.ParseInt(numbers[0]), parsers.ParseInt(numbers[1])
+	return parsers.StringToInt(numbers[0]), parsers.StringToInt(numbers[1])
 }

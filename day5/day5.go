@@ -41,14 +41,14 @@ func parseInput(lines []string) (map[int][]int, [][]int) {
 
 func parseOrderRule(line string) []int {
 	order := strings.Split(line, "|")
-	return []int{parsers.ParseInt(order[0]), parsers.ParseInt(order[1])}
+	return []int{parsers.StringToInt(order[0]), parsers.StringToInt(order[1])}
 }
 
 func parsePages(line string) []int {
 	pagesString := strings.Split(line, ",")
 	pages := make([]int, len(pagesString))
 	for i, page := range pagesString {
-		pages[i] = parsers.ParseInt(page)
+		pages[i] = parsers.StringToInt(page)
 	}
 	return pages
 }
