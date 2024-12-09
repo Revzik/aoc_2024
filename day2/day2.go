@@ -55,7 +55,7 @@ func parseReport(report string) []int {
 
 	parsedReport := make([]int, len(splitReport))
 	for i, val := range splitReport {
-		parsedReport[i] = parsers.ParseInt(val)
+		parsedReport[i] = parsers.StringToInt(val)
 	}
 
 	return parsedReport
