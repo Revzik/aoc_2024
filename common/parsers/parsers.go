@@ -16,3 +16,14 @@ func StringToInt(numString string) int {
 func RuneToInt(numRune rune) int {
 	return int(numRune - '0')
 }
+
+func RuneToIntMatrix(matrix [][]rune) [][]int {
+	intMatrix := make([][]int, len(matrix))
+	for i, row := range matrix {
+		intMatrix[i] = make([]int, len(row))
+		for j, char := range row {
+			intMatrix[i][j] = RuneToInt(char)
+		}
+	}
+	return intMatrix
+}
