@@ -66,7 +66,13 @@ func countTrailsForPoint(point types.Point, topographyMap Map, countRating bool)
 	for len(queue) > 0 {
 		current := queue[0]
 		queue = queue[1:]
-		visited[current] = true
+
+		// if we want to count all routes we need to keep neighbours unvisited until all previous are processed
+		// we mark only when we are in the vertex
+		// this way all possible routes add any needed neighbour regardless if it's going to be visited by other routes
+		if countRating {
+			visited[current] = true
+		}
 
 		height := topographyMap.Get(current)
 		neighbours := getNeighbours(current, topographyMap)
@@ -80,12 +86,13 @@ func countTrailsForPoint(point types.Point, topographyMap Map, countRating bool)
 				continue
 			}
 
+			// if we want to count reachable points, we mark neighbours before we process them
+			// this way they will be visited even if another route wants to add them into queue
+			if !countRating {
+				visited[neighbour] = true
+			}
+
 			if neighbourHeight == 9 {
-				// don't know why this works, made it by mistake
-				// task failed succesfully I guess
-				if !countRating {
-					visited[neighbour] = true
-				}
 				totalCount++
 			} else {
 				queue = append(queue, neighbour)
