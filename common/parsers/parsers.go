@@ -13,6 +13,14 @@ func StringToInt(numString string) int {
 	return num
 }
 
+func StringToInt64(numString string) int64 {
+	num, err := strconv.ParseInt(numString, 10, 64)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return num
+}
+
 func RuneToInt(numRune rune) int {
 	return int(numRune - '0')
 }
