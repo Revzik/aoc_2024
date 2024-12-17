@@ -4,16 +4,16 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/revzik/aoc_2024/common/files"
-	"github.com/revzik/aoc_2024/common/types"
+	f "github.com/revzik/aoc_2024/common/files"
+	s "github.com/revzik/aoc_2024/common/structures"
 )
 
 func RunTask() {
 	path := "day6/input"
-	lines := files.ReadLines(path)
+	lines := f.ReadLines(path)
 
-	board := types.CreateBoard(lines)
-	originalPlane := types.CopyMatrix(board.Plane)
+	board := s.CreateBoard(lines)
+	originalPlane := s.CopyMatrix(board.Plane)
 
 	fmt.Printf("Total squares walked: %d\n", followPath(board))
 
@@ -28,7 +28,7 @@ type Guard struct {
 	Y   int
 }
 
-func (g Guard) Move(direction types.Point) Guard {
+func (g Guard) Move(direction s.Vector) Guard {
 	return Guard{Dir: g.Dir, X: g.X + direction.X, Y: g.Y + direction.Y}
 }
 
@@ -48,35 +48,35 @@ func (g *Guard) Turn() {
 }
 
 // Board related
-func resetBoard(board types.Board, originalPlane [][]rune) {
+func resetBoard(board s.Board, originalPlane [][]rune) {
 	for i := range originalPlane {
 		copy(board.Plane[i], originalPlane[i])
 	}
 }
 
-func isWithinBounds(board types.Board, g Guard) bool {
-	if g.X >= board.MinX && g.X <= board.MaxX && g.Y >= board.MinY && g.Y <= board.MaxY {
+func isWithinBounds(board s.Board, g Guard) bool {
+	if g.X >= board.MinX() && g.X <= board.MaxX() && g.Y >= board.MinY() && g.Y <= board.MaxY() {
 		return true
 	}
 	return false
 }
 
-func getDirection(g Guard) types.Point {
+func getDirection(g Guard) s.Vector {
 	switch g.Dir {
 	case '>':
-		return types.Point{X: 1, Y: 0}
+		return s.Vector{X: 1, Y: 0}
 	case 'v':
-		return types.Point{X: 0, Y: 1}
+		return s.Vector{X: 0, Y: 1}
 	case '<':
-		return types.Point{X: -1, Y: 0}
+		return s.Vector{X: -1, Y: 0}
 	case '^':
-		return types.Point{X: 0, Y: -1}
+		return s.Vector{X: 0, Y: -1}
 	default:
 		panic("Guard character is not correct")
 	}
 }
 
-func findGuard(board types.Board) Guard {
+func findGuard(board s.Board) Guard {
 	for y, line := range board.Plane {
 		for x, char := range line {
 			if char == '^' || char == '>' || char == 'v' || char == '<' {
@@ -89,13 +89,13 @@ func findGuard(board types.Board) Guard {
 }
 
 // First part
-func followPath(board types.Board) int {
+func followPath(board s.Board) int {
 	guard := findGuard(board)
 	followGuardPath(board, guard)
 	return countVisitedPoints(board)
 }
 
-func countVisitedPoints(board types.Board) int {
+func countVisitedPoints(board s.Board) int {
 	total := 0
 
 	for _, line := range board.Plane {
@@ -110,16 +110,16 @@ func countVisitedPoints(board types.Board) int {
 }
 
 // Second part
-func countPossibleLoops(board types.Board) int {
+func countPossibleLoops(board s.Board) int {
 	total := 0
 
 	guard := findGuard(board)
-	originalPlane := types.CopyMatrix(board.Plane)
+	originalPlane := s.CopyMatrix(board.Plane)
 
 	for y, line := range board.Plane {
 		for x := range line {
 			resetBoard(board, originalPlane)
-			if isObstructed(board, types.Point{X: x, Y: y}) {
+			if isObstructed(board, s.Vector{X: x, Y: y}) {
 				continue
 			}
 
@@ -136,7 +136,7 @@ func countPossibleLoops(board types.Board) int {
 	return total
 }
 
-func isObstructed(b types.Board, p types.Point) bool {
+func isObstructed(b s.Board, p s.Vector) bool {
 	return b.Plane[p.Y][p.X] == '#' || b.Plane[p.Y][p.X] == '^' || b.Plane[p.Y][p.X] == '>' || b.Plane[p.Y][p.X] == 'v' || b.Plane[p.Y][p.X] == '<'
 }
 
@@ -148,7 +148,7 @@ func isInLoop(guard Guard, visitedTurningPoints map[Guard]bool) bool {
 }
 
 // Common part
-func followGuardPath(board types.Board, guard Guard) error {
+func followGuardPath(board s.Board, guard Guard) error {
 	direction := getDirection(guard)
 	nextPosition := guard.Move(direction)
 

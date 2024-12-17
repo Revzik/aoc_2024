@@ -3,13 +3,13 @@ package day4
 import (
 	"fmt"
 
-	"github.com/revzik/aoc_2024/common/files"
-	"github.com/revzik/aoc_2024/common/types"
+	f "github.com/revzik/aoc_2024/common/files"
+	s "github.com/revzik/aoc_2024/common/structures"
 )
 
 func RunTask() {
-	lines := files.ReadLines("day4/input")
-	matrix := types.CreateMatrix(lines)
+	lines := f.ReadLines("day4/input")
+	matrix := s.CreateMatrix(lines)
 
 	fmt.Printf("XMAS occurrences: %d\n", countXMAS(matrix))
 	fmt.Printf("X-MAS occurrences: %d\n", countXShapedMAS(matrix))

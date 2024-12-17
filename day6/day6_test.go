@@ -3,46 +3,46 @@ package day6
 import (
 	"testing"
 
-	"github.com/revzik/aoc_2024/common/types"
+	s "github.com/revzik/aoc_2024/common/structures"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestFindGuard(t *testing.T) {
-	board1 := types.CreateBoard([]string{
+	board1 := s.CreateBoard([]string{
 		".....",
 		".^...",
 		".....",
 		".....",
 		".....",
 	})
-	board2 := types.CreateBoard([]string{
+	board2 := s.CreateBoard([]string{
 		".....",
 		".....",
 		".....",
 		".....",
 		"...v.",
 	})
-	board3 := types.CreateBoard([]string{
+	board3 := s.CreateBoard([]string{
 		".......",
 		".......",
 		"..>....",
 		".......",
 	})
 
-	assert.Equal(t, types.Point{X: 1, Y: 1}, findGuard(board1))
-	assert.Equal(t, types.Point{X: 3, Y: 4}, findGuard(board2))
-	assert.Equal(t, types.Point{X: 2, Y: 2}, findGuard(board3))
+	assert.Equal(t, s.Vector{X: 1, Y: 1}, findGuard(board1))
+	assert.Equal(t, s.Vector{X: 3, Y: 4}, findGuard(board2))
+	assert.Equal(t, s.Vector{X: 2, Y: 2}, findGuard(board3))
 }
 
 func TestCountVisited(t *testing.T) {
-	board1 := types.CreateBoard([]string{
+	board1 := s.CreateBoard([]string{
 		".#X..",
 		".^XX#",
 		"..XX.",
 		"##XX.",
 		"..##.",
 	})
-	board2 := types.CreateBoard([]string{
+	board2 := s.CreateBoard([]string{
 		".X...",
 		".XXX.",
 		".X.X.",
@@ -55,7 +55,7 @@ func TestCountVisited(t *testing.T) {
 }
 
 func TestGuardWithinBounds(t *testing.T) {
-	board := types.CreateBoard([]string{
+	board := s.CreateBoard([]string{
 		"......",
 		"......",
 		"......",
@@ -71,14 +71,14 @@ func TestGuardWithinBounds(t *testing.T) {
 }
 
 func TestGuardPath(t *testing.T) {
-	board := types.CreateBoard([]string{
+	board := s.CreateBoard([]string{
 		".#...",
 		"....#",
 		".^...",
 		"##...",
 		"..##.",
 	})
-	expectedResult := types.CreateBoard([]string{
+	expectedResult := s.CreateBoard([]string{
 		".#X..",
 		".XXX#",
 		".XXX.",
@@ -92,14 +92,14 @@ func TestGuardPath(t *testing.T) {
 }
 
 func TestLoopDetection(t *testing.T) {
-	board1 := types.CreateBoard([]string{
+	board1 := s.CreateBoard([]string{
 		".#...",
 		"....#",
 		".^...",
 		"#....",
 		"...#.",
 	})
-	board2 := types.CreateBoard([]string{
+	board2 := s.CreateBoard([]string{
 		"...#.....",
 		".......#.",
 		".#.......",
@@ -109,7 +109,7 @@ func TestLoopDetection(t *testing.T) {
 		"..#......",
 		"....#....",
 	})
-	board3 := types.CreateBoard([]string{
+	board3 := s.CreateBoard([]string{
 		"...#.....",
 		".......#.",
 		".#.......",
@@ -130,7 +130,7 @@ func TestLoopDetection(t *testing.T) {
 }
 
 func TestCountLoops(t *testing.T) {
-	board := types.CreateBoard([]string{
+	board := s.CreateBoard([]string{
 		"....#.....",
 		".........#",
 		"..........",

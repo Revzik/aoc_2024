@@ -3,17 +3,17 @@ package day10
 import (
 	"fmt"
 
-	"github.com/revzik/aoc_2024/common/files"
-	"github.com/revzik/aoc_2024/common/parsers"
-	"github.com/revzik/aoc_2024/common/types"
+	f "github.com/revzik/aoc_2024/common/files"
+	p "github.com/revzik/aoc_2024/common/parsers"
+	s "github.com/revzik/aoc_2024/common/structures"
 )
 
 func RunTask() {
 	path := "day10/input"
-	lines := files.ReadLines(path)
+	lines := f.ReadLines(path)
 
-	matrix := types.CreateMatrix(lines)
-	intMatrix := parsers.RuneToIntMatrix(matrix)
+	matrix := s.CreateMatrix(lines)
+	intMatrix := p.RuneToIntMatrix(matrix)
 	topographyMap := Map{Plane: intMatrix}
 
 	fmt.Printf("Trailheads sum: %d\n", countTrails(topographyMap, false))
@@ -24,7 +24,7 @@ type Map struct {
 	Plane [][]int
 }
 
-func (m Map) Get(p types.Point) int {
+func (m Map) Get(p s.Vector) int {
 	return m.Plane[p.Y][p.X]
 }
 
@@ -49,18 +49,18 @@ func countTrails(topographyMap Map, countRating bool) int {
 	for i, row := range topographyMap.Plane {
 		for j, height := range row {
 			if height == 0 {
-				total += countTrailsForPoint(types.Point{X: j, Y: i}, topographyMap, countRating)
+				total += countTrailsForPoint(s.Vector{X: j, Y: i}, topographyMap, countRating)
 			}
 		}
 	}
 	return total
 }
 
-func countTrailsForPoint(point types.Point, topographyMap Map, countRating bool) int {
+func countTrailsForPoint(point s.Vector, topographyMap Map, countRating bool) int {
 	// BFS inspired algorithm
 	// neighbour is only valid if value is higher by one
-	queue := []types.Point{point}
-	visited := map[types.Point]bool{point: true}
+	queue := []s.Vector{point}
+	visited := map[s.Vector]bool{point: true}
 	totalCount := 0
 
 	for len(queue) > 0 {
@@ -103,20 +103,20 @@ func countTrailsForPoint(point types.Point, topographyMap Map, countRating bool)
 	return totalCount
 }
 
-func getNeighbours(point types.Point, topographyMap Map) []types.Point {
-	neighbours := make([]types.Point, 0)
+func getNeighbours(point s.Vector, topographyMap Map) []s.Vector {
+	neighbours := make([]s.Vector, 0)
 
 	if point.X+1 <= topographyMap.MaxX() {
-		neighbours = append(neighbours, types.Point{X: point.X + 1, Y: point.Y})
+		neighbours = append(neighbours, s.Vector{X: point.X + 1, Y: point.Y})
 	}
 	if point.Y+1 <= topographyMap.MaxY() {
-		neighbours = append(neighbours, types.Point{X: point.X, Y: point.Y + 1})
+		neighbours = append(neighbours, s.Vector{X: point.X, Y: point.Y + 1})
 	}
 	if point.X-1 >= topographyMap.MinX() {
-		neighbours = append(neighbours, types.Point{X: point.X - 1, Y: point.Y})
+		neighbours = append(neighbours, s.Vector{X: point.X - 1, Y: point.Y})
 	}
 	if point.Y-1 >= topographyMap.MinY() {
-		neighbours = append(neighbours, types.Point{X: point.X, Y: point.Y - 1})
+		neighbours = append(neighbours, s.Vector{X: point.X, Y: point.Y - 1})
 	}
 
 	return neighbours

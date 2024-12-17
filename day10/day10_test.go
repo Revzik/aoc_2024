@@ -3,8 +3,8 @@ package day10
 import (
 	"testing"
 
-	"github.com/revzik/aoc_2024/common/parsers"
-	"github.com/revzik/aoc_2024/common/types"
+	p "github.com/revzik/aoc_2024/common/parsers"
+	s "github.com/revzik/aoc_2024/common/structures"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,7 +19,7 @@ func TestCountTrailsFor(t *testing.T) {
 		"01329801",
 		"10456732",
 	}
-	testMap := Map{Plane: parsers.RuneToIntMatrix(types.CreateMatrix(stringMap))}
+	testMap := Map{Plane: p.RuneToIntMatrix(s.CreateMatrix(stringMap))}
 
 	trails := countTrails(testMap, false)
 	rating := countTrails(testMap, true)
