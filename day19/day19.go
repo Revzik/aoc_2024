@@ -13,9 +13,13 @@ func RunTask() {
 	lines := f.ReadLines(path)
 
 	towels, patterns := parseInput(lines)
-	towels = reduceTowels(towels)
+	reducedTowels := reduceTowels(towels)
 
-	fmt.Printf("Number of possible patterns: %d\n", countPossiblePatterns(patterns, towels))
+	amountPossible, possiblePatterns := countPossiblePatterns(patterns, reducedTowels)
+	allCombinations := countCombinationsForAll(possiblePatterns, towels)
+
+	fmt.Printf("Possible patterns: %d\n", amountPossible)
+	fmt.Printf("All possible combinations: %d\n", allCombinations)
 }
 
 func parseInput(lines []string) ([]string, []string) {
@@ -41,14 +45,17 @@ func reduceTowels(towels []string) []string {
 	return towels
 }
 
-func countPossiblePatterns(patterns []string, towels []string) int {
+func countPossiblePatterns(patterns []string, towels []string) (int, []string) {
 	total := 0
+	possible := make([]string, 0)
+
 	for _, pattern := range patterns {
 		if isPossible(pattern, towels) {
+			possible = append(possible, pattern)
 			total++
 		}
 	}
-	return total
+	return total, possible
 }
 
 func isPossible(pattern string, towels []string) bool {
@@ -63,4 +70,32 @@ func isPossible(pattern string, towels []string) bool {
 		}
 	}
 	return false
+}
+
+func countCombinationsForAll(patterns []string, towels []string) int {
+	knownCombinations := make(map[string]int)
+	total := 0
+
+	for _, pattern := range patterns {
+		total += countCombinations(pattern, towels, knownCombinations, 0)
+	}
+
+	return total
+}
+
+func countCombinations(pattern string, towels []string, knownCombinations map[string]int, amount int) int {
+	if val, ok := knownCombinations[pattern]; ok {
+		return val
+	}
+
+	for _, towel := range towels {
+		if pattern == towel {
+			amount += 1
+		} else if len(pattern) >= len(towel) && pattern[:len(towel)] == towel {
+			amount += countCombinations(pattern[len(towel):], towels, knownCombinations, amount)
+		}
+	}
+
+	knownCombinations[pattern] = amount
+	return amount
 }

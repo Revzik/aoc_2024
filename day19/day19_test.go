@@ -92,3 +92,30 @@ func TestReduceTowels(t *testing.T) {
 
 	assert.Equal(t, expectedReduced, reduced)
 }
+
+func TestCombinations(t *testing.T) {
+	towels := []string{"r", "rr", "rw", "w", "b"}
+	pattern := "rrrwb"
+
+	combinations := countCombinations(pattern, towels, make(map[string]int), 0)
+
+	assert.Equal(t, 5, combinations)
+}
+
+func TestPartTwo(t *testing.T) {
+	towels := []string{"r", "wr", "b", "g", "bwu", "rb", "gb", "br"}
+	patterns := []string{
+		"brwrr",
+		"bggr",
+		"gbbr",
+		"rrbgbr",
+		"ubwu",
+		"bwurrg",
+		"brgr",
+		"bbrgwb",
+	}
+
+	combinations := countCombinationsForAll(patterns, towels)
+
+	assert.Equal(t, 16, combinations)
+}
