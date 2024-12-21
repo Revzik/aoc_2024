@@ -109,7 +109,7 @@ func ReindeerDijkstra(g *Graph, src, dst s.Vector) (*Node, error) {
 	srcNode := Node{
 		Vertex:   src,
 		Distance: 0,
-		Path:     make([]s.Vector, 0),
+		Path:     []s.Vector{src.Add(s.Vector{X: -1, Y: 0})},
 	}
 	unvisitedNodes := NewHeap()
 	unvisitedNodes.Push(&srcNode)
@@ -131,9 +131,10 @@ func ReindeerDijkstra(g *Graph, src, dst s.Vector) (*Node, error) {
 				continue
 			}
 
-			// TODO: add chech if previous node and next one are on the same line
-			// if not, add 1000 to distance
 			newDistance := node.Distance + edge.Weight
+			if !areInLine(edge.Vertex, node.Path[len(node.Path)-1]) {
+				newDistance += 1000
+			}
 
 			if newDistance < paths[edge.Vertex].Distance {
 				paths[edge.Vertex].Distance = newDistance
@@ -145,4 +146,14 @@ func ReindeerDijkstra(g *Graph, src, dst s.Vector) (*Node, error) {
 	}
 
 	return nil, errors.New("path not found")
+}
+
+func areInLine(v1, v2 s.Vector) bool {
+	if v1.X == v2.X {
+		return true
+	}
+	if v1.Y == v2.Y {
+		return true
+	}
+	return false
 }
