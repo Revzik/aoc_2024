@@ -3,6 +3,7 @@ package day16
 import (
 	"testing"
 
+	"github.com/revzik/aoc_2024/common/structures"
 	"github.com/revzik/aoc_2024/day16/graphs"
 	"github.com/stretchr/testify/assert"
 )
@@ -25,9 +26,10 @@ func TestMaze(t *testing.T) {
 		"#S..#.....#...#",
 		"###############",
 	}
-	maze, src, dst := createMaze(lines)
+	board := structures.CreateBoard(lines)
+	maze, src, dst := createMaze(board)
 
-	end, err := graphs.ReindeerDijkstra(maze, src, dst)
+	end, err := graphs.ReindeerDijkstra(maze, src, dst, board)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 7036, end.Distance)

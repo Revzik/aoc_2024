@@ -17,7 +17,7 @@ func RunTask() {
 	fmt.Printf("Number of resonant antinodes: %d\n", countResonantAntinodes(board))
 }
 
-func countWeakAntinodes(board s.Board) int {
+func countWeakAntinodes(board *s.Board) int {
 	total := 0
 	antinodes := make(map[s.Vector]bool)
 
@@ -40,7 +40,7 @@ func countWeakAntinodes(board s.Board) int {
 	return total
 }
 
-func markWeakAntinodes(board s.Board, antinodes map[s.Vector]bool, p s.Vector) {
+func markWeakAntinodes(board *s.Board, antinodes map[s.Vector]bool, p s.Vector) {
 	searchedRune := board.Plane[p.Y][p.X]
 
 	// check only to the bottom, top ones are dealt with
@@ -60,7 +60,7 @@ func markWeakAntinodes(board s.Board, antinodes map[s.Vector]bool, p s.Vector) {
 	}
 }
 
-func countResonantAntinodes(board s.Board) int {
+func countResonantAntinodes(board *s.Board) int {
 	antinodes := make(map[s.Vector]bool)
 
 	for y := 0; y <= board.MaxY(); y++ {
@@ -74,7 +74,7 @@ func countResonantAntinodes(board s.Board) int {
 	return len(antinodes)
 }
 
-func markResonantAntinodes(board s.Board, antinodes map[s.Vector]bool, p s.Vector) {
+func markResonantAntinodes(board *s.Board, antinodes map[s.Vector]bool, p s.Vector) {
 	searchedRune := board.Plane[p.Y][p.X]
 
 	// check only to the bottom, top ones are dealt with
@@ -87,7 +87,7 @@ func markResonantAntinodes(board s.Board, antinodes map[s.Vector]bool, p s.Vecto
 	}
 }
 
-func markResonanceInLine(board s.Board, antinodes map[s.Vector]bool, p1 s.Vector, p2 s.Vector) {
+func markResonanceInLine(board *s.Board, antinodes map[s.Vector]bool, p1 s.Vector, p2 s.Vector) {
 	xDist := p1.X - p2.X
 	yDist := p1.Y - p2.Y
 
@@ -108,7 +108,7 @@ func markResonanceInLine(board s.Board, antinodes map[s.Vector]bool, p1 s.Vector
 	}
 }
 
-func validateBoundaries(antinodes map[s.Vector]bool, board s.Board) {
+func validateBoundaries(antinodes map[s.Vector]bool, board *s.Board) {
 	for point := range antinodes {
 		if point.X < board.MinX() || point.X > board.MaxX() || point.Y < board.MinY() || point.Y > board.MaxY() {
 			antinodes[point] = false

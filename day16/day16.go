@@ -11,9 +11,10 @@ import (
 func RunTask() {
 	path := "day16/input"
 	lines := f.ReadLines(path)
+	board := s.CreateBoard(lines)
 
-	maze, src, dst := createMaze(lines)
-	end, err := g.ReindeerDijkstra(maze, src, dst)
+	maze, src, dst := createMaze(board)
+	end, err := g.ReindeerDijkstra(maze, src, dst, board)
 	if err != nil {
 		panic("no possible path")
 	}
@@ -23,8 +24,7 @@ func RunTask() {
 }
 
 // each intersection, corner or dead end
-func createMaze(lines []string) (*g.Graph, s.Vector, s.Vector) {
-	board := s.CreateBoard(lines)
+func createMaze(board *s.Board) (*g.Graph, s.Vector, s.Vector) {
 	maze := g.NewGraph()
 	var start s.Vector
 	var end s.Vector
@@ -46,7 +46,7 @@ func createMaze(lines []string) (*g.Graph, s.Vector, s.Vector) {
 	return maze, start, end
 }
 
-func addVertex(maze *g.Graph, board s.Board, x, y int) {
+func addVertex(maze *g.Graph, board *s.Board, x, y int) {
 	directions := []s.Vector{
 		{X: 1, Y: 0},
 		{X: 0, Y: 1},

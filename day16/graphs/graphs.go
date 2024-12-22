@@ -3,6 +3,7 @@ package graphs
 import (
 	"container/heap"
 	"errors"
+	"fmt"
 	"math"
 
 	s "github.com/revzik/aoc_2024/common/structures"
@@ -82,7 +83,7 @@ func (h *NodeHeap) Pop() interface{} {
 }
 
 // actual algorithm
-func ReindeerDijkstra(g *Graph, src, dst s.Vector) (*Node, error) {
+func ReindeerDijkstra(g *Graph, src, dst s.Vector, maze *s.Board) (*Node, error) {
 
 	if _, ok := g.Vertices[src]; !ok {
 		panic("source node not found in graph")
@@ -119,10 +120,8 @@ func ReindeerDijkstra(g *Graph, src, dst s.Vector) (*Node, error) {
 		}
 		visited[node.Vertex] = true
 
-		for _, edge := range g.GetEdges(node.Vertex) {
-			if visited[edge.Vertex] {
-				continue
-			}
+		edges := g.GetEdges(node.Vertex)
+		for _, edge := range edges {
 
 			newDistance := node.Distance + edge.Weight
 			if !areInLine(edge.Vertex, node.Path[len(node.Path)-1]) {
@@ -130,13 +129,15 @@ func ReindeerDijkstra(g *Graph, src, dst s.Vector) (*Node, error) {
 			}
 
 			// could this be changed to <= to find all shortest paths?
-			if newDistance < nodes[edge.Vertex].Distance {
+			if newDistance <= nodes[edge.Vertex].Distance {
 				nodes[edge.Vertex].Distance = newDistance
-				nodes[edge.Vertex].Path = append(node.Path, node.Vertex)
+				nodes[edge.Vertex].Path = newPath(node)
 			}
 
 			heap.Push(unvisitedNodes, nodes[edge.Vertex])
 		}
+
+		printPath(maze, node)
 	}
 
 	if end, ok := nodes[dst]; ok {
@@ -154,4 +155,24 @@ func areInLine(v1, v2 s.Vector) bool {
 		return true
 	}
 	return false
+}
+
+func newPath(node *Node) []s.Vector {
+	newPath := make([]s.Vector, len(node.Path))
+	copy(newPath, node.Path)
+	newPath = append(newPath, node.Vertex)
+	return newPath
+}
+
+func printPath(maze *s.Board, node *Node) {
+	matrix := s.CopyMatrix(maze.Plane)
+
+	for _, v := range node.Path {
+		matrix[v.Y][v.X] = 'O'
+	}
+	matrix[node.Vertex.Y][node.Vertex.X] = '0'
+
+	for _, row := range matrix {
+		fmt.Println(string(row))
+	}
 }

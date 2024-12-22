@@ -48,13 +48,13 @@ func (g *Guard) Turn() {
 }
 
 // Board related
-func resetBoard(board s.Board, originalPlane [][]rune) {
+func resetBoard(board *s.Board, originalPlane [][]rune) {
 	for i := range originalPlane {
 		copy(board.Plane[i], originalPlane[i])
 	}
 }
 
-func isWithinBounds(board s.Board, g Guard) bool {
+func isWithinBounds(board *s.Board, g Guard) bool {
 	if g.X >= board.MinX() && g.X <= board.MaxX() && g.Y >= board.MinY() && g.Y <= board.MaxY() {
 		return true
 	}
@@ -76,7 +76,7 @@ func getDirection(g Guard) s.Vector {
 	}
 }
 
-func findGuard(board s.Board) Guard {
+func findGuard(board *s.Board) Guard {
 	for y, line := range board.Plane {
 		for x, char := range line {
 			if char == '^' || char == '>' || char == 'v' || char == '<' {
@@ -89,13 +89,13 @@ func findGuard(board s.Board) Guard {
 }
 
 // First part
-func followPath(board s.Board) int {
+func followPath(board *s.Board) int {
 	guard := findGuard(board)
 	followGuardPath(board, guard)
 	return countVisitedPoints(board)
 }
 
-func countVisitedPoints(board s.Board) int {
+func countVisitedPoints(board *s.Board) int {
 	total := 0
 
 	for _, line := range board.Plane {
@@ -110,7 +110,7 @@ func countVisitedPoints(board s.Board) int {
 }
 
 // Second part
-func countPossibleLoops(board s.Board) int {
+func countPossibleLoops(board *s.Board) int {
 	total := 0
 
 	guard := findGuard(board)
@@ -136,7 +136,7 @@ func countPossibleLoops(board s.Board) int {
 	return total
 }
 
-func isObstructed(b s.Board, p s.Vector) bool {
+func isObstructed(b *s.Board, p s.Vector) bool {
 	return b.Plane[p.Y][p.X] == '#' || b.Plane[p.Y][p.X] == '^' || b.Plane[p.Y][p.X] == '>' || b.Plane[p.Y][p.X] == 'v' || b.Plane[p.Y][p.X] == '<'
 }
 
@@ -148,7 +148,7 @@ func isInLoop(guard Guard, visitedTurningPoints map[Guard]bool) bool {
 }
 
 // Common part
-func followGuardPath(board s.Board, guard Guard) error {
+func followGuardPath(board *s.Board, guard Guard) error {
 	direction := getDirection(guard)
 	nextPosition := guard.Move(direction)
 

@@ -57,6 +57,6 @@ func CopyMatrix(matrix [][]rune) [][]rune {
 	return dst
 }
 
-func CreateBoard(lines []string) Board {
-	return Board{Plane: CreateMatrix(lines)}
+func CreateBoard(lines []string) *Board {
+	return &Board{Plane: CreateMatrix(lines)}
 }
