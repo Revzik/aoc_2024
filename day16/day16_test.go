@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPartOne(t *testing.T) {
+func TestMaze(t *testing.T) {
 	lines := []string{
 		"###############",
 		"#.......#....E#",
@@ -31,4 +31,5 @@ func TestPartOne(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Equal(t, 7036, end.Distance)
+	assert.Equal(t, 45, len(end.Path))
 }

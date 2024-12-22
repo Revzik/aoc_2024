@@ -73,15 +73,12 @@ func (h *NodeHeap) Push(x interface{}) {
 
 func (h *NodeHeap) Pop() interface{} {
 	old := *h
-	x := old[len(old)-1]
-	*h = old[:len(old)-1]
-	return x
-}
 
-func NewHeap() *NodeHeap {
-	var nodeHeap NodeHeap
-	heap.Init(&nodeHeap)
-	return &nodeHeap
+	size := len(old)
+	x := old[size-1]
+	*h = old[:size-1]
+
+	return x
 }
 
 // actual algorithm
@@ -94,7 +91,7 @@ func ReindeerDijkstra(g *Graph, src, dst s.Vector) (*Node, error) {
 		panic("destination node not found in graph")
 	}
 
-	paths := make(map[s.Vector]*Node)
+	nodes := make(map[s.Vector]*Node)
 	visited := make(map[s.Vector]bool)
 	for vertex := range g.Vertices {
 		node := Node{
@@ -102,7 +99,7 @@ func ReindeerDijkstra(g *Graph, src, dst s.Vector) (*Node, error) {
 			Distance: math.MaxInt32,
 			Path:     make([]s.Vector, 0),
 		}
-		paths[vertex] = &node
+		nodes[vertex] = &node
 		visited[vertex] = false
 	}
 
@@ -111,20 +108,16 @@ func ReindeerDijkstra(g *Graph, src, dst s.Vector) (*Node, error) {
 		Distance: 0,
 		Path:     []s.Vector{src.Add(s.Vector{X: -1, Y: 0})},
 	}
-	unvisitedNodes := NewHeap()
-	unvisitedNodes.Push(&srcNode)
+	unvisitedNodes := &NodeHeap{}
+	heap.Push(unvisitedNodes, &srcNode)
 
 	for unvisitedNodes.Len() > 0 {
-		node := unvisitedNodes.Pop().(*Node)
+		node := heap.Pop(unvisitedNodes).(*Node)
 
 		if visited[node.Vertex] {
 			continue
 		}
 		visited[node.Vertex] = true
-
-		if node.Vertex == dst {
-			return node, nil
-		}
 
 		for _, edge := range g.GetEdges(node.Vertex) {
 			if visited[edge.Vertex] {
@@ -136,16 +129,21 @@ func ReindeerDijkstra(g *Graph, src, dst s.Vector) (*Node, error) {
 				newDistance += 1000
 			}
 
-			if newDistance < paths[edge.Vertex].Distance {
-				paths[edge.Vertex].Distance = newDistance
-				paths[edge.Vertex].Path = append(paths[edge.Vertex].Path, node.Vertex)
+			// could this be changed to <= to find all shortest paths?
+			if newDistance < nodes[edge.Vertex].Distance {
+				nodes[edge.Vertex].Distance = newDistance
+				nodes[edge.Vertex].Path = append(node.Path, node.Vertex)
 			}
 
-			unvisitedNodes.Push(paths[edge.Vertex])
+			heap.Push(unvisitedNodes, nodes[edge.Vertex])
 		}
 	}
 
-	return nil, errors.New("path not found")
+	if end, ok := nodes[dst]; ok {
+		return end, nil
+	} else {
+		return nil, errors.New("path not found")
+	}
 }
 
 func areInLine(v1, v2 s.Vector) bool {

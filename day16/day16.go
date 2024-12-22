@@ -19,6 +19,7 @@ func RunTask() {
 	}
 
 	fmt.Printf("Shortest path through maze: %d\n", end.Distance)
+	fmt.Printf("Tiles next to shortest paths: %d\n", len(end.Path))
 }
 
 // each intersection, corner or dead end
