@@ -35,3 +35,23 @@ func TestMaze(t *testing.T) {
 	assert.Equal(t, 7036, end.Distance)
 	assert.Equal(t, 45, len(end.Path))
 }
+
+func TestMiniMaze(t *testing.T) {
+	lines := []string{
+		"#####",
+		"#.#E#",
+		"#...#",
+		"#.#.#",
+		"#...#",
+		"#S#.#",
+		"#####",
+	}
+	board := structures.CreateBoard(lines)
+	maze, src, dst := createMaze(board)
+
+	end, err := graphs.ReindeerDijkstra(maze, src, dst, board)
+
+	assert.Nil(t, err)
+	assert.Equal(t, 3006, end.Distance)
+	assert.Equal(t, 10, len(end.Path))
+}

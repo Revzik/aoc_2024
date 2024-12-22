@@ -48,6 +48,7 @@ func (g *Graph) AddEdge(src, dst s.Vector, weight int) {
 
 // Dijkstra internal structure
 type Node struct {
+	Id       int
 	Vertex   s.Vector
 	Distance int
 	Path     []s.Vector
@@ -92,10 +93,13 @@ func ReindeerDijkstra(g *Graph, src, dst s.Vector, maze *s.Board) (*Node, error)
 		panic("destination node not found in graph")
 	}
 
+	id := 0
 	nodes := make(map[s.Vector]*Node)
 	visited := make(map[s.Vector]bool)
 	for vertex := range g.Vertices {
+		id++
 		node := Node{
+			Id:       id,
 			Vertex:   vertex,
 			Distance: math.MaxInt32,
 			Path:     make([]s.Vector, 0),
@@ -137,8 +141,10 @@ func ReindeerDijkstra(g *Graph, src, dst s.Vector, maze *s.Board) (*Node, error)
 			heap.Push(unvisitedNodes, nodes[edge.Vertex])
 		}
 
-		printPath(maze, node)
+		// printPath(maze, node, nodes)
 	}
+
+	printDistances(maze, nodes)
 
 	if end, ok := nodes[dst]; ok {
 		return end, nil
@@ -164,15 +170,38 @@ func newPath(node *Node) []s.Vector {
 	return newPath
 }
 
-func printPath(maze *s.Board, node *Node) {
+func printPath(maze *s.Board, node *Node, nodes map[s.Vector]*Node) {
 	matrix := s.CopyMatrix(maze.Plane)
 
 	for _, v := range node.Path {
-		matrix[v.Y][v.X] = 'O'
+		if val, ok := nodes[v]; ok {
+			matrix[v.Y][v.X] = rune(val.Id + 64)
+		}
 	}
 	matrix[node.Vertex.Y][node.Vertex.X] = '0'
 
 	for _, row := range matrix {
 		fmt.Println(string(row))
+	}
+	fmt.Println()
+}
+
+func printDistances(maze *s.Board, nodesForVector map[s.Vector]*Node) {
+	matrix := s.CopyMatrix(maze.Plane)
+	for key, val := range nodesForVector {
+		matrix[key.Y][key.X] = rune(val.Id + 64)
+	}
+	for _, row := range matrix {
+		fmt.Println(string(row))
+	}
+
+	fmt.Println()
+
+	nodes := make(map[*Node]bool)
+	for _, val := range nodesForVector {
+		nodes[val] = true
+	}
+	for key := range nodes {
+		fmt.Printf("%v: %d\n", string(rune(key.Id+64)), key.Distance)
 	}
 }
