@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"strings"
 
 	s "github.com/revzik/aoc_2024/common/structures"
 )
@@ -147,6 +148,12 @@ func ReindeerDijkstra(g *Graph, src, dst s.Vector, maze *s.Board) (*Node, error)
 	printDistances(maze, nodes)
 
 	if end, ok := nodes[dst]; ok {
+		fmt.Println("Shortest path:")
+		strPath := make([]string, len(end.Path))
+		for i, item := range end.Path {
+			strPath[i] = fmt.Sprintf("(%d, %d)", item.X, item.Y)
+		}
+		fmt.Println(strings.Join(strPath, ", "))
 		return end, nil
 	} else {
 		return nil, errors.New("path not found")
@@ -202,6 +209,6 @@ func printDistances(maze *s.Board, nodesForVector map[s.Vector]*Node) {
 		nodes[val] = true
 	}
 	for key := range nodes {
-		fmt.Printf("%v: %d\n", string(rune(key.Id+64)), key.Distance)
+		fmt.Printf("%v, %v: %d\n", string(rune(key.Id+64)), key.Vertex, key.Distance)
 	}
 }

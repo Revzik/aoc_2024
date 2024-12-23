@@ -9,7 +9,7 @@ import (
 )
 
 func RunTask() {
-	path := "day16/input"
+	path := "day16/input_mini"
 	lines := f.ReadLines(path)
 	board := s.CreateBoard(lines)
 
