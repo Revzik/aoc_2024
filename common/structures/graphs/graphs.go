@@ -43,8 +43,7 @@ func (g *Graph[N]) AddEdge(src, dst N, weight int) {
 	}
 }
 
-// dijkstra's algorithm implementation
-func Dijkstra[N comparable](g *Graph[N], src, dst N) (*Path[N], error) {
+func Dijkstra[N comparable](g *Graph[N], src N, dst N) (*Path[N], error) {
 
 	if _, ok := g.Nodes[src]; !ok {
 		panic("source node not found in graph")
